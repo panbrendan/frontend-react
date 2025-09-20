@@ -1,40 +1,58 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import ProductList from "./ProductList";
+import AboutUs from "./AboutUs";
+import CartItem from "./CartItem";
+import "./App.css";
 
+function App() {
+  const [showProductList, setShowProductList] = useState(false);
 
-import { AppProvider } from './context/AppContext';
-import CartValue from './components/CartValue';
-import ExpenseList from './components/ExpenseList';
-import ItemSelected from './components/ItemSelected';
-import Location from './components/Location';
+  const handleGetStartedClick = () => {
+    setShowProductList(true);
+  };
 
-const App = () => {
-    return (
-        <AppProvider>
-            <div className='container'>
-                <h1 className='mt-3'>Shopping App</h1>
-                <div className='row mt-3'> 
-                    <div className='col-sm'>
-                        <CartValue />
-                    </div>
-                    <div className='col-sm'>
-                        <Location />
-                    </div>
-                </div>
-                <h3 className='mt-3'>Shopping Cart</h3>
-                <div className='row '>
-                    <div className='col-sm'>
-                        <ExpenseList />
-                    </div>
-                </div>
-                <h3 className='mt-3'>Add Items</h3>
-                <div className='row mt-3'>
-                    <div className='col-sm'>
-                        <ItemSelected/>
-                    </div>
-                </div>
+  return (
+    <Router>
+      <div className="app-container">
+        {!showProductList && (
+          <div className={`landing-page ${showProductList ? "fade-out" : ""}`}>
+            <div className="background-image"></div>
+            <div className="content">
+              <div className="landing_content">
+                <h1>Welcome To Paradise Nursery</h1>
+                <div className="divider"></div>
+                <p>Where Green Meets Serenity</p>
+                <button
+                  className="get-started-button"
+                  onClick={handleGetStartedClick}
+                >
+                  Get Started
+                </button>
+              </div>
+              <div className="aboutus_container">
+                <AboutUs />
+              </div>
             </div>
-        </AppProvider>
-    );
-};
+          </div>
+        )}
+        {showProductList && (
+          <div className="product-list-container visible">
+            <Routes>
+              <Route path="/product-list" element={<ProductList />} />
+              <Route path="/cart" element={<CartItem />} />
+              <Route path="*" element={<Navigate to="/product-list" />} />
+            </Routes>
+          </div>
+        )}
+      </div>
+    </Router>
+  );
+}
+
 export default App;
